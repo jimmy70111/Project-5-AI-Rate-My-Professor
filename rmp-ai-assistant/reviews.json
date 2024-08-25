@@ -1,0 +1,35 @@
+{
+    "reviews": [
+      {
+        "professor": "Prof1",
+        "review": "Great professor, explains concepts clearly and makes the class engaging.",
+        "subject": "Math",
+        "stars": 5
+      },
+      {
+        "professor": "Prof2",
+        "review": "Very knowledgeable but moves through material too quickly.",
+        "subject": "Physics",
+        "stars": 3
+      },
+      {
+        "professor": "Prof3",
+        "review": "Provides lots of extra help outside of class, but lectures are somewhat disorganized.",
+        "subject": "Chemistry",
+        "stars": 4
+      },
+      {
+        "professor": "Prof4",
+        "review": "Assignments are very challenging and not well explained.",
+        "subject": "Computer Science",
+        "stars": 2
+      },
+      {
+        "professor": "Prof5",
+        "review": "Excellent lecturer, very patient, and approachable. Highly recommended.",
+        "subject": "Biology",
+        "stars": 5
+      }
+    ]
+  }
+  
