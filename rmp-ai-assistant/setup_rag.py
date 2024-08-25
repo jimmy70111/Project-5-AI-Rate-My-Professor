@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 load_dotenv()
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
-import requests
 import os
 import json
 
