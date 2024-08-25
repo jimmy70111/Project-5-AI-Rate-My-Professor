@@ -24,8 +24,25 @@ export async function POST(req) {
     },
     body: JSON.stringify({ inputs: text })
   });
-  const embedding = await response;
-  console.log(embedding.json())
+  const embedding = await response.json();
+  const results = await index.query({
+    topK: 5,
+    includeMetadata: true,
+    vector: embedding,
+  })
+  let resultString = ''
+  results.matches.forEach((match) => {
+    resultString += `
+    Returned Results:
+    Professor: ${match.id}
+    Review: ${match.metadata.stars}
+    Subject: ${match.metadata.subject}
+    Stars: ${match.metadata.stars}
+    \n\n`
+  })
+  const lastMessage = data[data.length - 1]
+  const lastMessageContent = lastMessage.content + resultString
+  const lastDataWithoutLastMessage = data.slice(0, data.length - 1)
   try {
     const completion = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -37,7 +54,8 @@ export async function POST(req) {
         "model": "meta-llama/llama-3.1-8b-instruct:free",
         "messages": [
           {"role": "system", "content": sysPrompt},
-          ...data
+          ...lastDataWithoutLastMessage,
+          {"role":"user","content":lastMessageContent}
         ],
         "top_p": 1,
         "temperature": 1,
