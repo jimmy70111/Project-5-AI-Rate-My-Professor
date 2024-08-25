@@ -17,6 +17,27 @@ export async function POST(req) {
   });
   const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
   const index = pc.index('rag').namespace('ns1');
+
+  const text = data[data.length - 1].content;
+  const embedding = await hf.embeddings({
+    model: 'sentence-transformers/all-MiniLM-L6-v2',
+    inputs: text,
+  });
+  const results = await index.query({
+    topK: 5,
+    includeMetadata: true,
+    vector: embedding.data[0].embedding,
+  })
+  let resultString = ''
+  results.matches.forEach((match) => {
+    resultString += `
+    Returned Results:
+    Professor: ${match.id}
+    Review: ${match.metadata.stars}
+    Subject: ${match.metadata.subject}
+    Stars: ${match.metadata.stars}
+    \n\n`
+  })
   try {
     const completion = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
