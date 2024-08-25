@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { Pinecone } from '@pinecone-database/pinecone';
+import { HfInference } from '@huggingface/inference';
 
 const sysPrompt = `
 You are a rate my professor agent to help students find classes, that takes in user questions and answers them.
@@ -10,7 +12,11 @@ const LLAMA_API_KEY = process.env.LLAMA_API_KEY;
 
 export async function POST(req) {
   const data = await req.json();
-
+  const pc = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY,
+  });
+  const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
+  const index = pc.index('rag').namespace('ns1');
   try {
     const completion = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
